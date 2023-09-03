@@ -1,3 +1,5 @@
+const hre = require("hardhat");
+
 async function main() {
   const [owner] = await hre.ethers.getSigners();
 
@@ -12,11 +14,18 @@ async function main() {
 
   try {
     // Estimate gas
-    const gasEstimate = await simpleNFT.connect(owner).estimateGas.mintNFT(owner.address, uri);
+    const estimatedGas = await simpleNFT.connect(owner).estimateGas.mintNFT(owner.address, uri);
+
+    // Set min and max gas limits
+    const minGasLimit = 21000;
+    const maxGasLimit = 500000;
+
+    // Use the estimated gas if it's within the min-max range, otherwise use the max limit
+    const gasToUse = estimatedGas.gt(minGasLimit) && estimatedGas.lt(maxGasLimit) ? estimatedGas : maxGasLimit;
 
     // Send transaction
     const tx = await simpleNFT.connect(owner).mintNFT(owner.address, uri, {
-      gasLimit: gasEstimate,
+      gasLimit: gasToUse,
     });
     await tx.wait();
 
