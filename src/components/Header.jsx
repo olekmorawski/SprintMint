@@ -20,7 +20,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="logo_container">
-        <img src="styles\images\ourlogo.png" alt="Our Logo" className="logo" />
+        <img src="styles\images\logo.png" alt="Our Logo" className="logo" />
       </div>
       <div className="box_header">
         <a href="">
