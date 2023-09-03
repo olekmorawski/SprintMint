@@ -9,6 +9,8 @@ contract SimpleNFT is ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
+    event Minted(address indexed recipient, uint256 tokenId, string uri);
+
     constructor() ERC721("SimpleNFT", "SNFT") {}
 
     function mintNFT(address recipient, string memory uri) external onlyOwner returns (uint256) {
@@ -17,6 +19,8 @@ contract SimpleNFT is ERC721URIStorage, Ownable {
         uint256 newNftTokenId = _tokenIds.current();
         _mint(recipient, newNftTokenId);
         _setTokenURI(newNftTokenId, uri);
+
+        emit Minted(recipient, newNftTokenId, uri);  
 
         return newNftTokenId;
     }
