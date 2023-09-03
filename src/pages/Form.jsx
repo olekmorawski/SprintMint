@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Web3 from 'web3';
-import ipfsClient from 'ipfs-http-client';
+import { create } from 'ipfs-http-client';
 import Header from '../components/Header.jsx';
 
-const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
+const ipfs = create({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' });
 const web3 = new Web3(Web3.givenProvider);
 
 const Form = () => {
