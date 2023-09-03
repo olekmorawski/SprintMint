@@ -29,7 +29,7 @@ Welcome to SprintMint, where we revolutionize the way you create, mint, and mana
 
 ## Getting Started
 
-Follow these steps to get PartyPal up and running on your local machine:
+Follow these steps to get up and running on your local machine:
 
 ### Installation
 
