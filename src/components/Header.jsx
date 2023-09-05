@@ -1,22 +1,26 @@
-import { useNavigate } from 'react-router-dom' // Import useNavigate
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 const Header = () => {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const openMetaMask = async () => {
     if (window.ethereum) {
       try {
-        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
         if (accounts.length > 0) {
-          navigate('/form/');
+          navigate("/form");
         }
       } catch (error) {
-        console.error('User denied account access');
+        console.error("User denied account access");
       }
     } else {
-      alert('MetaMask is not installed. Please consider installing it: https://metamask.io/');
+      alert(
+        "MetaMask is not installed. Please consider installing it: https://metamask.io/"
+      );
     }
   };
-  
+
   return (
     <div className="header">
       <div className="logo_container">
@@ -48,7 +52,7 @@ const Header = () => {
         <p className="btn_text">✨ Create Now ✨</p>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
