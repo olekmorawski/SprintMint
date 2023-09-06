@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import Web3 from "web3";
-import { create } from "kubo-rpc-client";
 import Header from "../components/Header.jsx";
-
+import axios from "axios";
 let web3;
 let kuboClient;
 
@@ -477,18 +476,20 @@ const abi = [
   },
 ];
 
+const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
+
 const Form = () => {
   const [file, setFile] = useState(null); // For the file input
   const [title, setTitle] = useState("");
+  const [contract, setContract] = useState(null);
 
   useEffect(() => {
     const init = async () => {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" });
         web3 = new Web3(window.ethereum);
-
-        // Initialize Kubo RPC client
-        kuboClient = create();
+        const contract = new web3.eth.Contract(abi, contractAddress);
+        setContract(contract);
       } else {
         console.error("Ethereum provider not found");
       }
@@ -497,51 +498,55 @@ const Form = () => {
     init();
   }, []);
 
-  const content = "Your content here";
-  const blob = new Blob([content], { type: "text/plain" });
-
-  const uploadToKubo = async (data) => {
-    try {
-      // Assuming Kubo RPC's add method works similarly to IPFS
-      const { cid } = await kuboClient.add(blob);
-      return "uploaded_path";
-    } catch (error) {
-      console.error("Error uploading to Kubo RPC:", error);
-    }
-  };
-
-  const mintNFT = async (uri) => {
+  const mintNFT = async (imgHash) => {
     try {
       const accounts = await web3.eth.getAccounts();
-      const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
-      const contract = new web3.eth.Contract(abi, contractAddress);
-
       await contract.methods
-        .mintNFT(accounts[0], uri)
-        .send({ from: accounts[0] });
+        .mintNFT(accounts[0], imgHash)
+        .send({ from: accounts[0] })
+        .on("transactionHash", function (hash) {
+          console.log("transactionHash", hash);
+        })
+        .on("confirmation", function (confirmationNumber, receipt) {
+          console.log("confirmation:", JSON.stringify(confirmationNumber));
+        })
+        .on("receipt", function (receipt) {
+          console.log("receipt", receipt);
+        });
       console.log(`Minted successfully`);
     } catch (error) {
       console.error("Minting failed", error);
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      // Decide whether to use the file or the blob
-      const dataToUpload = file ? file : blob;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (file) {
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const uploadedPath = await uploadToKubo(dataToUpload);
-      const metadata = {
-        title,
-        image: `ipfs://${uploadedPath}`,
-      };
+        const resFile = await axios({
+          method: "post",
+          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
+          data: formData,
+          headers: {
+            pinata_api_key: "ff6d3ff7737e8627277c",
+            pinata_secret_api_key:
+              "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207",
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const imgHash = `ipfs://${resFile.data.IpfsHash}`;
 
-      const metadataPath = await uploadToKubo(JSON.stringify(metadata));
-      await mintNFT(`ipfs://${metadataPath}`);
-    } catch (error) {
-      console.error("Error in handleSubmit:", error);
+        await mintNFT(imgHash);
+      } catch (e) {
+        console.error("Axios upload error:", e.response?.data || e.message);
+        alert("Unable to upload to Pinata");
+      }
     }
   };
+
   return (
     <>
       <Header />

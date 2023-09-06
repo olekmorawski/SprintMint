@@ -13,14 +13,17 @@ contract SimpleNFT is ERC721URIStorage, Ownable {
 
     constructor() ERC721("SimpleNFT", "SNFT") {}
 
-    function mintNFT(address recipient, string memory uri) external onlyOwner returns (uint256) {
+    function mintNFT(
+        address recipient,
+        string memory uri
+    ) external onlyOwner returns (uint256) {
         _tokenIds.increment();
 
         uint256 newNftTokenId = _tokenIds.current();
         _mint(recipient, newNftTokenId);
         _setTokenURI(newNftTokenId, uri);
 
-        emit Minted(recipient, newNftTokenId, uri);  
+        emit Minted(recipient, newNftTokenId, uri);
 
         return newNftTokenId;
     }

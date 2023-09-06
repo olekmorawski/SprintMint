@@ -9,5 +9,5 @@ module.exports = {
       url: "https://rpc.testnet.mantle.xyz",
       accounts: [process.env.PRIV_KEY],
     },
-  }
+  },
 };

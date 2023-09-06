@@ -1,35 +1,50 @@
 const hre = require("hardhat");
-const { create } = require("kubo-rpc-client");
+const axios = require("axios");
 
-async function main() {
+async function main(uri) {
+  // Pass the URI as a parameter
   const [owner] = await hre.ethers.getSigners();
-
-  // Replace with your deployed contract address
   const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
 
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
   const simpleNFT = SimpleNFT.attach(contractAddress);
 
-  // Initialize Kubo RPC client
-  const kuboClient = create();
+  // Upload to IPFS through Pinata
+  const pinataApiKey = "ff6d3ff7737e8627277c";
+  const pinataSecretApiKey =
+    "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207";
 
-  // Replace this with the actual content you want to upload to IPFS
-  const content = "Your content here";
+  let cid;
+  try {
+    const response = await axios.post(
+      "https://api.pinata.cloud/pinning/pinFileToIPFS",
+      {
+        pinataContent: uri, // Use the passed URI instead of hardcoded content
+      },
+      {
+        headers: {
+          pinata_api_key: pinataApiKey,
+          pinata_secret_api_key: pinataSecretApiKey,
+        },
+      }
+    );
+    cid = response.data.IpfsHash;
+  } catch (error) {
+    console.error("IPFS Upload Error:", error);
+    return;
+  }
 
-  // Upload to IPFS through Kubo RPC
-  const { cid } = await kuboClient.add(content);
-  const uri = `ipfs://${cid}`;
-
-  console.log("Minting NFT with URI: ", uri);
+  const ipfsUri = `ipfs://${cid}`;
+  console.log("Minting NFT with URI:", ipfsUri);
 
   try {
     // Estimate gas
     const estimatedGas = await simpleNFT
       .connect(owner)
-      .estimateGas.mintNFT(owner.address, uri);
+      .estimateGas.mintNFT(owner.address, ipfsUri);
 
     // Set min and max gas limits
-    const minGasLimit = 21000;
+    const minGasLimit = 30000;
     const maxGasLimit = 500000;
 
     // Use the estimated gas if it's within the min-max range, otherwise use the max limit
@@ -39,7 +54,7 @@ async function main() {
         : maxGasLimit;
 
     // Send transaction
-    const tx = await simpleNFT.connect(owner).mintNFT(owner.address, uri, {
+    const tx = await simpleNFT.connect(owner).mintNFT(owner.address, ipfsUri, {
       gasLimit: gasToUse,
     });
     await tx.wait();

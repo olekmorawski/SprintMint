@@ -3,6 +3,14 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    "process.env.REACT_APP_PINATA_API_KEY": JSON.stringify(
+      process.env.REACT_APP_PINATA_API_KEY
+    ),
+    "process.env.REACT_APP_PINATA_SECRET_API_KEY": JSON.stringify(
+      process.env.REACT_APP_PINATA_SECRET_API_KEY
+    ),
+  },
   build: {
     rollupOptions: {
       external: ["events"],
