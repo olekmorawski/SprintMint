@@ -1,6 +1,6 @@
 # Sprint Mint Marketplace - Mint, Buy, and Sell Your NFTs in a Blink of an Eye
 
-![SprintMint Logo](/styles/images/logo.png)
+![SprintMint Logo](/styles/images/logo4git.png)
 
 Welcome to SprintMint, your ultimate platform for everything Non-Fungible Tokens (NFTs)! 🎨 Whether you're looking to mint your first NFT or you're an experienced artist or collector, SprintMint provides a comprehensive yet simplified experience. Say goodbye to complexity and high costs, and say hello to a user-friendly platform for NFT minting, buying, and selling.
 
@@ -90,4 +90,3 @@ Contributors:
 - Krzysztof Wesołek
 - Izabela Król
 - Aleksandra Sokołowska
-
