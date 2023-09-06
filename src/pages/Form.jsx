@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import Web3 from "web3";
 import Header from "../components/Header.jsx";
 import axios from "axios";
+
 let web3;
-let kuboClient;
 
 const abi = [
   {
@@ -480,6 +480,7 @@ const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
 
 const Form = () => {
   const [file, setFile] = useState(null); // For the file input
+  const [imgURL, setImgURL] = useState(null); // For the image URL
   const [title, setTitle] = useState("");
   const [contract, setContract] = useState(null);
 
@@ -498,51 +499,66 @@ const Form = () => {
     init();
   }, []);
 
-  const mintNFT = async (imgHash) => {
+  const mintNFT = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Upload to Pinata
+    let imgHash;
+    try {
+      const resFile = await axios.post(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            pinata_api_key: "ff6d3ff7737e8627277c",
+            pinata_secret_api_key:
+              "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207",
+          },
+        }
+      );
+      imgHash = `ipfs://${resFile.data.IpfsHash}`;
+    } catch (error) {
+      console.error("Pinata upload failed:", error);
+      return;
+    }
+
+    // Mint NFT
     try {
       const accounts = await web3.eth.getAccounts();
       await contract.methods
         .mintNFT(accounts[0], imgHash)
-        .send({ from: accounts[0] })
-        .on("transactionHash", function (hash) {
-          console.log("transactionHash", hash);
-        })
-        .on("confirmation", function (confirmationNumber, receipt) {
-          console.log("confirmation:", JSON.stringify(confirmationNumber));
-        })
-        .on("receipt", function (receipt) {
-          console.log("receipt", receipt);
-        });
+        .send({ from: accounts[0] });
       console.log(`Minted successfully`);
     } catch (error) {
       console.error("Minting failed", error);
     }
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    // Create a blob URL for the file
+    const objectURL = URL.createObjectURL(selectedFile);
+
+    // Update the image URL state variable
+    setImgURL(objectURL);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
       try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const resFile = await axios({
-          method: "post",
-          url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
-          data: formData,
+        await axios.post("http://localhost:3000/api/mint", formData, {
           headers: {
-            pinata_api_key: "ff6d3ff7737e8627277c",
-            pinata_secret_api_key:
-              "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207",
             "Content-Type": "multipart/form-data",
           },
         });
-        const imgHash = `ipfs://${resFile.data.IpfsHash}`;
-
-        await mintNFT(imgHash);
-      } catch (e) {
-        console.error("Axios upload error:", e.response?.data || e.message);
-        alert("Unable to upload to Pinata");
+      } catch (error) {
+        console.log("Axios Error: ", error);
       }
     }
   };
@@ -555,17 +571,17 @@ const Form = () => {
           <p className="p1">CREATE</p>
           <p className="p2"> &nbsp;NEW NFT</p>
         </div>
-        <form>
+        <form onSubmit={handleSubmit}>
           <section>
             <label htmlFor="file">Import file</label>
             <input
               type="file"
               name="file"
               id="file"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleFileChange}
             />
             <div className="photo_container">
-              <img src="" alt="profile picture preview" />
+              <img src={imgURL} alt="profile picture preview" />
             </div>
           </section>
           <section>

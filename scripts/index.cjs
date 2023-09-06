@@ -1,21 +1,22 @@
+const express = require("express");
+const multer = require("multer");
 const hre = require("hardhat");
 const axios = require("axios");
-const fs = require("fs");
+const FormData = require("form-data");
+const cors = require("cors");
+const app = express();
+const upload = multer({ storage: multer.memoryStorage() });
+app.use(cors());
 
-const fileBuffer = fs.readFileSync("path/to/your/file.png");
-
-async function main() {
-  // Pass the URI as a parameter
+async function mintNFT(fileBuffer) {
   const [owner] = await hre.ethers.getSigners();
   const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
-
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
   const simpleNFT = SimpleNFT.attach(contractAddress);
 
   const formData = new FormData();
   formData.append("file", fileBuffer, { filename: "file.png" });
 
-  // Upload to IPFS through Pinata
   const pinataApiKey = "ff6d3ff7737e8627277c";
   const pinataSecretApiKey =
     "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207";
@@ -27,7 +28,7 @@ async function main() {
       formData,
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          ...formData.getHeaders(),
           pinata_api_key: pinataApiKey,
           pinata_secret_api_key: pinataSecretApiKey,
         },
@@ -72,9 +73,13 @@ async function main() {
   }
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+app.post("/api/mint", upload.single("file"), async (req, res) => {
+  const fileBuffer = req.file.buffer;
+  await mintNFT(fileBuffer);
+
+  res.status(200).send("NFT Minted Successfully");
+});
+
+app.listen(3000, () => {
+  console.log("Server running on http://localhost:3000/");
+});
