@@ -30,19 +30,19 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 
 ## Frontend Technologies
 
-- ![React Logo](https://reactjs.org/logo-og.png) [React](https://reactjs.org/)
-- ![Vite Logo](https://vitejs.dev/logo.svg) [Vite](https://vitejs.dev/)
-- ![SASS Logo](https://sass-lang.com/assets/img/logos/logo.svg) [SASS](https://sass-lang.com/)
-- ![Metamask Logo](https://metamask.io/images/favicon-32x32.png) [Metamask](https://metamask.io/)
+- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/35px-React-icon.svg.png" alt="React Logo"> [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+- <img src="https://vitejs.dev/logo.svg" alt="Vite Logo" height="35"> [Vite](https://vitejs.dev/) - Fast and efficient build tool for web apps.
+- <img src="https://sass-lang.com/assets/img/logos/logo.svg" alt="SASS Logo" height="35"> [SASS](https://sass-lang.com/) - A powerful CSS preprocessor for styling.
+- <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask Logo" height="35"> [Metamask](https://metamask.io/)
 
 ## Backend Technologies
 
-- ![Express.js Logo](https://expressjs.com/images/favicon.png) [Express.js](https://expressjs.com/)
-- ![IPFS Logo](https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs-logo-vector.svg) [IPFS](https://ipfs.io/)
-- Solidity
-- Pinata
-- Hardhat
-- ![Mantle Blockchain Logo](https://www.mantle.xyz/logo-light.svg) [Mantle Blockchain](https://www.mantle.xyz/)
+- <img src="https://expressjs.com/images/favicon.png" alt="Express.js Logo" height="35"> [Express.js](https://expressjs.com/) - A fast, unopinionated, minimalist web framework for Node.js.
+- <img src="https://ipfs.io/ipfs/QmR7GSQM93Cx5eAg6a6yRzNde1FQv7uL6X1o4k7zrJa3LX/ipfs-logo-vector.svg" alt="IPFS Logo" height="35"> [IPFS](https://ipfs.io/)
+- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35">![Solidity](https://www.mantle.xyz/) -
+- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35">![Piniata](https://www.mantle.xyz/) -
+- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35">![Hardhat](https://www.mantle.xyz/) -
+- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35">![Mantle Blockchain](https://www.mantle.xyz/) -
 
 ## Libraries
 
@@ -90,3 +90,4 @@ Contributors:
 - Krzysztof Wesołek
 - Izabela Król
 - Aleksandra Sokołowska
+
