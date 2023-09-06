@@ -479,8 +479,8 @@ const abi = [
 const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
 
 const Form = () => {
-  const [file, setFile] = useState(null); // For the file input
-  const [imgURL, setImgURL] = useState(null); // For the image URL
+  const [file, setFile] = useState(null);
+  const [imgURL, setImgURL] = useState(null);
   const [title, setTitle] = useState("");
   const [contract, setContract] = useState(null);
 
@@ -489,19 +489,23 @@ const Form = () => {
       if (window.ethereum) {
         await window.ethereum.request({ method: "eth_requestAccounts" });
         web3 = new Web3(window.ethereum);
-        const contract = new web3.eth.Contract(abi, contractAddress);
-        setContract(contract);
+        const contractInstance = new web3.eth.Contract(abi, contractAddress);
+        setContract(contractInstance);
       } else {
         console.error("Ethereum provider not found");
       }
     };
-
     init();
   }, []);
 
   const mintNFT = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
+    console.log("FormData:", formData);
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ", " + pair[1]);
+    }
 
     // Upload to Pinata
     let imgHash;
@@ -519,6 +523,7 @@ const Form = () => {
         }
       );
       imgHash = `ipfs://${resFile.data.IpfsHash}`;
+      console.log("Pinata Response:", resFile); // Debugging line
     } catch (error) {
       console.error("Pinata upload failed:", error);
       return;
@@ -538,27 +543,31 @@ const Form = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    console.log("Selected File:", selectedFile);
     setFile(selectedFile);
-
-    // Create a blob URL for the file
     const objectURL = URL.createObjectURL(selectedFile);
-
-    // Update the image URL state variable
     setImgURL(objectURL);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
       try {
-        await axios.post("http://localhost:3000/api/mint", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await mintNFT(file);
+        await axios
+          .post("http://localhost:3000/api/mint", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log("Response:", response);
+            mintNFT();
+          });
       } catch (error) {
-        console.log("Axios Error: ", error);
+        console.log("Axios Error:", error);
       }
     }
   };
@@ -595,7 +604,7 @@ const Form = () => {
           </section>
         </form>
         <div className="bar">
-          <p>Additional NFT’s details</p>
+          <p>Additional NFTs details</p>
           <div className="arrow"> </div>
         </div>
         <div className="btn_NFT" onClick={handleSubmit}>
