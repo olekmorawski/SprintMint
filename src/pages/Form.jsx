@@ -508,8 +508,10 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handleSubmit triggered");
     if (file) {
       try {
+        console.log("File found, attempting to mint NFT...");
         const accounts = await web3.eth.getAccounts();
         const txReceipt = await contract.methods
           .mintNFT(accounts[0], title1)
@@ -532,6 +534,9 @@ const Form = () => {
       } catch (error) {
         console.error("Error during minting process:", error);
       }
+      console.log(
+        `Transaction confirmed with hash: ${txReceipt.transactionHash}`
+      );
     } else {
       console.error("No file selected");
     }

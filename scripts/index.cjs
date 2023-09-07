@@ -21,13 +21,14 @@ function bufferToStream(buffer) {
 }
 
 async function mintNFT(fileBuffer) {
+  console.log("MintNFT function started");
   const [owner] = await hre.ethers.getSigners();
   const contractAddress = "0x73ba4C37CE620CE4F7883ED4FCDF289c5448628B";
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
   const simpleNFT = SimpleNFT.attach(contractAddress);
   const fileStream = bufferToStream(fileBuffer);
-
   let cid;
+
   try {
     const options = {
       pinataMetadata: {
@@ -40,11 +41,11 @@ async function mintNFT(fileBuffer) {
     console.error("IPFS Upload Error:", error);
     return;
   }
-
   const ipfsUri = `ipfs://${cid}`;
   console.log("Minting NFT with URI:", ipfsUri);
-
   try {
+    console.log("Trying to mint NFT...");
+
     const estimatedGas = await simpleNFT
       .connect(owner)
       .estimateGas.mintNFT(owner.address, ipfsUri);
@@ -73,6 +74,7 @@ async function mintNFT(fileBuffer) {
 }
 
 app.post("/api/mint", upload.single("file"), async (req, res) => {
+  console.log("/api/mint route triggered");
   try {
     const fileBuffer = req.file.buffer;
     console.log("Received file buffer:", fileBuffer);
@@ -83,6 +85,7 @@ app.post("/api/mint", upload.single("file"), async (req, res) => {
     console.error("Error in /api/mint route:", error);
     res.status(500).send("Internal Server Error");
   }
+  console.log("Minting completed successfully");
 });
 
 app.listen(3000, () => {
