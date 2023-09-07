@@ -476,7 +476,7 @@ const abi = [
   },
 ];
 
-const contractAddress = "0xc2efA79Fff659130D1ef28067670eb1ed970662c";
+const contractAddress = "0x73ba4C37CE620CE4F7883ED4FCDF289c5448628B";
 
 const Form = () => {
   const [file, setFile] = useState(null);

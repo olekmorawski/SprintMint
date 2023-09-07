@@ -16,7 +16,7 @@ contract SimpleNFT is ERC721URIStorage, Ownable {
     function mintNFT(
         address recipient,
         string memory uri
-    ) external onlyOwner returns (uint256) {
+    ) external returns (uint256) {
         _tokenIds.increment();
 
         uint256 newNftTokenId = _tokenIds.current();
