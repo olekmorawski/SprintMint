@@ -70,14 +70,22 @@ async function mintNFT(fileBuffer) {
     );
   } catch (error) {
     console.error("Minting failed:", error);
+    console.error("Error Details:", error.message); // Log the error message
+    console.error("Error Stack Trace:", error.stack); // Log the stack trace
   }
 }
 
 app.post("/api/mint", upload.single("file"), async (req, res) => {
-  const fileBuffer = req.file.buffer;
-  await mintNFT(fileBuffer);
-
-  res.status(200).send("NFT Minted Successfully");
+  try {
+    const fileBuffer = req.file.buffer;
+    console.log("Received file buffer:", fileBuffer); // Log the received file buffer
+    await mintNFT(fileBuffer);
+    console.log("Minting completed successfully");
+    res.status(200).send("NFT Minted Successfully");
+  } catch (error) {
+    console.error("Error in /api/mint route:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 app.listen(3000, () => {

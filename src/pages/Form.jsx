@@ -563,12 +563,14 @@ const Form = () => {
             },
           })
           .then((response) => {
-            console.log("Response:", response);
+            console.log("API Response:", response);
             mintNFT();
           });
       } catch (error) {
-        console.log("Axios Error:", error);
+        console.error("API Request Error:", error);
       }
+    } else {
+      console.error("No file selected");
     }
   };
 

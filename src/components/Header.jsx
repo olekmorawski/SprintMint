@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import img from "/styles/images/logo.png";
 const Header = () => {
   let navigate = useNavigate();
 
@@ -24,7 +25,7 @@ const Header = () => {
   return (
     <div className="header">
       <div className="logo_container">
-        <img src="styles\images\logo.png" alt="Our Logo" className="logo" />
+        <img src={img} alt="Our Logo" className="logo" />
       </div>
       <div className="box_header">
         <a href="">
