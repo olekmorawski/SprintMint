@@ -23,7 +23,8 @@ function bufferToStream(buffer) {
 async function mintNFT(fileBuffer) {
   console.log("MintNFT function started");
   const [owner] = await hre.ethers.getSigners();
-  const contractAddress = "0x73ba4C37CE620CE4F7883ED4FCDF289c5448628B";
+  console.log("Owner's Address:", owner.address);
+  const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
   const simpleNFT = SimpleNFT.attach(contractAddress);
   const fileStream = bufferToStream(fileBuffer);
@@ -50,20 +51,30 @@ async function mintNFT(fileBuffer) {
       .connect(owner)
       .estimateGas.mintNFT(owner.address, ipfsUri);
 
-    const minGasLimit = 30000;
-    const maxGasLimit = 500000;
+    console.log("Estimated Gas:", estimatedGas.toString());
+
+    const minGasLimit = 30000000;
+    const maxGasLimit = 50000000;
 
     const gasToUse =
       estimatedGas.gt(minGasLimit) && estimatedGas.lt(maxGasLimit)
         ? estimatedGas
         : maxGasLimit;
 
+    console.log("Gas for the transaction:", gasToUse.toString());
+
     console.log("Waiting for transaction to go through...");
 
     const tx = await simpleNFT.connect(owner).mintNFT(owner.address, ipfsUri, {
       gasLimit: gasToUse,
     });
-    await tx.wait();
+
+    const receipt = await tx.wait();
+
+    if (receipt.status === 0) {
+      console.error("Transaction failed.");
+      throw new Error("The transaction was reverted.");
+    }
 
     console.log(
       `NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/${tx.hash}`

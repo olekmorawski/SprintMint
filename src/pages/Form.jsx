@@ -476,7 +476,7 @@ const abi = [
   },
 ];
 
-const contractAddress = "0x73ba4C37CE620CE4F7883ED4FCDF289c5448628B";
+const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
 
 const Form = () => {
   const [file, setFile] = useState(null);
@@ -516,9 +516,6 @@ const Form = () => {
         const txReceipt = await contract.methods
           .mintNFT(accounts[0], title1)
           .send({ from: accounts[0] });
-        console.log(
-          `Transaction confirmed with hash: ${txReceipt.transactionHash}`
-        );
         const formData = new FormData();
         formData.append("file", file);
         const response = await axios.post(
@@ -531,12 +528,12 @@ const Form = () => {
           }
         );
         console.log("Minting Response:", response.data);
+        console.log(
+          `Transaction confirmed with hash: ${txReceipt.transactionHash}`
+        );
       } catch (error) {
         console.error("Error during minting process:", error);
       }
-      console.log(
-        `Transaction confirmed with hash: ${txReceipt.transactionHash}`
-      );
     } else {
       console.error("No file selected");
     }

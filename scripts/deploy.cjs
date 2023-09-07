@@ -4,7 +4,10 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
 
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
-  const simpleNFT = await SimpleNFT.deploy();
+
+  const simpleNFT = await SimpleNFT.deploy({
+    gasLimit: 30000000,
+  });
 
   await simpleNFT.deployed();
 
@@ -14,6 +17,6 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch((error) => {
-      console.error(error);
-      process.exit(1);
+    console.error(error);
+    process.exit(1);
   });
