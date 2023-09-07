@@ -556,16 +556,11 @@ const Form = () => {
       formData.append("file", file);
       try {
         await mintNFT(file);
-        await axios
-          .post("http://localhost:3000/api/mint", formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          })
-          .then((response) => {
-            console.log("API Response:", response);
-            mintNFT();
-          });
+        await axios.post("http://localhost:3000/api/mint", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       } catch (error) {
         console.error("API Request Error:", error);
       }
