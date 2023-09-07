@@ -1,5 +1,3 @@
-const express = require("express");
-const multer = require("multer");
 const hre = require("hardhat");
 const pinataSDK = require("@pinata/sdk");
 const pinata = new pinataSDK(
@@ -7,11 +5,6 @@ const pinata = new pinataSDK(
   "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207"
 );
 const { Readable } = require("stream");
-const cors = require("cors");
-const app = express();
-const upload = multer({ storage: multer.memoryStorage() });
-
-app.use(cors());
 
 function bufferToStream(buffer) {
   const readable = new Readable();
@@ -84,21 +77,9 @@ async function mintNFT(fileBuffer) {
   }
 }
 
-app.post("/api/mint", upload.single("file"), async (req, res) => {
-  console.log("/api/mint route triggered");
-  try {
-    const fileBuffer = req.file.buffer;
-    console.log("Received file buffer:", fileBuffer);
-    await mintNFT(fileBuffer);
-    console.log("Minting completed successfully");
-    res.status(200).send("NFT Minted Successfully");
-  } catch (error) {
-    console.error("Error in /api/mint route:", error);
-    res.status(500).send("Internal Server Error");
-  }
-  console.log("Minting completed successfully");
-});
-
-app.listen(3000, () => {
-  console.log("Server running on http://localhost:3000/");
-});
+mintNFT()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
