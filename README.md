@@ -51,6 +51,10 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 - [hardhat](https://hardhat.org/)
 - [express](https://expressjs.com/)
 - [multer](https://www.npmjs.com/package/multer)
+- [form-data]
+- [cors](https://github.com/expressjs/cors) - Middleware for enabling CORS in Express applications.
+- [uuid](https://github.com/uuidjs/uuid) - A library for generating and working with UUIDs.
+- [nodemon](https://github.com/remy/nodemon) - Utility for monitoring changes and automatically restarting the server.
 
 ## Getting Started
 
@@ -68,9 +72,12 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 4. Install backend dependencies: `npm install`
 5. Start the backend server: `npm run start:backend`
 
-## Contributing
+## Contributors
 
-Contributions are welcome! Please follow our [contribution guidelines](link-to-contributing-guidelines).
+- Aleksander Morawski
+- Krzysztof Wesołek
+- Izabela Król
+- Aleksandra Sokołowska
 
 ## License
 
@@ -83,10 +90,3 @@ This project was originally made for ETHWarsaw2023 and applied for the following
 - Build on Mantle (Pool bounty)
 - Best NFT or Gaming project
 - Best UX
-
-Contributors:
-
-- Aleksander Morawski
-- Krzysztof Wesołek
-- Izabela Król
-- Aleksandra Sokołowska

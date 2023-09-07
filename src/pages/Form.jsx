@@ -481,7 +481,7 @@ const contractAddress = "0x73ba4C37CE620CE4F7883ED4FCDF289c5448628B";
 const Form = () => {
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
-  const [title, setTitle] = useState("");
+  const [title1, setTitle1] = useState("");
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
@@ -498,49 +498,6 @@ const Form = () => {
     init();
   }, []);
 
-  const mintNFT = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    console.log("FormData:", formData);
-
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ", " + pair[1]);
-    }
-
-    // Upload to Pinata
-    let imgHash;
-    try {
-      const resFile = await axios.post(
-        "https://api.pinata.cloud/pinning/pinFileToIPFS",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            pinata_api_key: "ff6d3ff7737e8627277c",
-            pinata_secret_api_key:
-              "462bb62848846981d6d23bcf21e527172d0d2d8bde7a71047d2c4b383dc88207",
-          },
-        }
-      );
-      imgHash = `ipfs://${resFile.data.IpfsHash}`;
-      console.log("Pinata Response:", resFile); // Debugging line
-    } catch (error) {
-      console.error("Pinata upload failed:", error);
-      return;
-    }
-
-    // Mint NFT
-    try {
-      const accounts = await web3.eth.getAccounts();
-      await contract.methods
-        .mintNFT(accounts[0], imgHash)
-        .send({ from: accounts[0] });
-      console.log(`Minted successfully`);
-    } catch (error) {
-      console.error("Minting failed", error);
-    }
-  };
-
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     console.log("Selected File:", selectedFile);
@@ -552,17 +509,28 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
       try {
-        await mintNFT(file);
-        await axios.post("http://localhost:3000/api/mint", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const accounts = await web3.eth.getAccounts();
+        const txReceipt = await contract.methods
+          .mintNFT(accounts[0], title1)
+          .send({ from: accounts[0] });
+        console.log(
+          `Transaction confirmed with hash: ${txReceipt.transactionHash}`
+        );
+        const formData = new FormData();
+        formData.append("file", file);
+        const response = await axios.post(
+          "http://localhost:3000/api/mint",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        console.log("Minting Response:", response.data);
       } catch (error) {
-        console.error("API Request Error:", error);
+        console.error("Error during minting process:", error);
       }
     } else {
       console.error("No file selected");
@@ -594,18 +562,18 @@ const Form = () => {
             <label htmlFor="title">NFT title</label>
             <input
               type="text"
-              name="title"
-              id="title"
-              onChange={(e) => setTitle(e.target.value)}
+              name="title1"
+              id="title1"
+              onChange={(e) => setTitle1(e.target.value)}
             />
           </section>
+          <button type="submit" className="btn_NFT">
+            <p className="btn_text_NFT">✨ Create Now ✨</p>
+          </button>
         </form>
         <div className="bar">
           <p>Additional NFTs details</p>
           <div className="arrow"> </div>
-        </div>
-        <div className="btn_NFT" onClick={handleSubmit}>
-          <p className="btn_text_NFT">✨ Create Now ✨</p>
         </div>
       </div>
     </>
