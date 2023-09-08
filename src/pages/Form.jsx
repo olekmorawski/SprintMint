@@ -12,7 +12,6 @@ const Form = () => {
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
   const [title, setTitle] = useState("");
-  const [metadataUri, setMetadataUri] = useState(""); // Added this state variable
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
@@ -44,9 +43,8 @@ const Form = () => {
       try {
         const accounts = await web3.eth.getAccounts();
         console.log("File found, attempting to mint NFT...");
-        const txReceipt = await contract.methods
-          .mintNFT(accounts[0], metadataUri, title)
-          .send({ from: accounts[0], gas: 500000 });
+
+        // Upload the file to your backend first to get the metadata URI.
         const formData = new FormData();
         formData.append("file", file);
         formData.append("title", title);
@@ -59,8 +57,19 @@ const Form = () => {
             },
           }
         );
-        console.log("Minting Response:", txReceipt);
-        console.log("Minting Response:", response.data);
+
+        if (response.data && response.data.ipfsHash) {
+          const metadataUri = `ipfs://${response.data.ipfsHash}`;
+          // const gasEstimate = await contract.methods
+          //   .mintNFT(accounts[0], metadataUri, title)
+          //   .estimateGas({ from: accounts[0] });
+
+          const txReceipt = await contract.methods
+            .mintNFT(accounts[0], metadataUri, title)
+            .send({ from: accounts[0], gas: 500000  });
+
+          console.log("Minting Response:", txReceipt);
+        }
       } catch (error) {
         console.error("Error during minting process:", error);
       }

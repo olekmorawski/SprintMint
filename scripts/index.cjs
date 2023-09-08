@@ -22,15 +22,18 @@ function bufferToStream(buffer) {
 async function storeOnIPFS(fileBuffer, title) {
   console.log("Storing file on IPFS");
   try {
-    const imageResult = await pinata.pinFileToIPFS(bufferToStream(fileBuffer));
+    const options = {
+      pinataMetadata: {
+        name: title, // This is the filename
+      },
+    };
+    const imageResult = await pinata.pinFileToIPFS(
+      bufferToStream(fileBuffer),
+      options
+    );
     const metadata = {
       title: title,
       image: `ipfs://${imageResult.IpfsHash}`,
-    };
-    const options = {
-      pinataMetadata: {
-        name: title,
-      },
     };
     const metadataResult = await pinata.pinJSONToIPFS(metadata, options);
     return metadataResult.IpfsHash;
