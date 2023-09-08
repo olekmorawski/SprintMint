@@ -1,6 +1,5 @@
 const express = require("express");
 const multer = require("multer");
-const hre = require("hardhat");
 const pinataSDK = require("@pinata/sdk");
 const pinata = new pinataSDK(
   "ff6d3ff7737e8627277c",
@@ -20,83 +19,42 @@ function bufferToStream(buffer) {
   return readable;
 }
 
-async function mintNFT(fileBuffer) {
-  console.log("MintNFT function started");
-  const [owner] = await hre.ethers.getSigners();
-  console.log("Owner's Address:", owner.address);
-  const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
-  const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
-  const simpleNFT = SimpleNFT.attach(contractAddress);
-  const fileStream = bufferToStream(fileBuffer);
-  let cid;
-
+async function storeOnIPFS(fileBuffer, title) {
+  console.log("Storing file on IPFS");
   try {
+    const imageResult = await pinata.pinFileToIPFS(bufferToStream(fileBuffer));
+    const metadata = {
+      title: title,
+      image: `ipfs://${imageResult.IpfsHash}`,
+    };
     const options = {
       pinataMetadata: {
-        name: "MyNFTName",
+        name: title,
       },
     };
-    const result = await pinata.pinFileToIPFS(fileStream, options);
-    cid = result.IpfsHash;
+    const metadataResult = await pinata.pinJSONToIPFS(metadata, options);
+    return metadataResult.IpfsHash;
   } catch (error) {
     console.error("IPFS Upload Error:", error);
-    return;
-  }
-  const ipfsUri = `ipfs://${cid}`;
-  console.log("Minting NFT with URI:", ipfsUri);
-  try {
-    console.log("Trying to mint NFT...");
-
-    const estimatedGas = await simpleNFT
-      .connect(owner)
-      .estimateGas.mintNFT(owner.address, ipfsUri);
-
-    console.log("Estimated Gas:", estimatedGas.toString());
-
-    const minGasLimit = 30000;
-    const maxGasLimit = 500000;
-
-    const gasToUse =
-      estimatedGas.gt(minGasLimit) && estimatedGas.lt(maxGasLimit)
-        ? estimatedGas
-        : maxGasLimit;
-
-    console.log("Gas for the transaction:", gasToUse.toString());
-
-    console.log("Waiting for transaction to go through...");
-
-    const tx = await simpleNFT.connect(owner).mintNFT(owner.address, ipfsUri, {
-      gasLimit: gasToUse,
-    });
-
-    const receipt = await tx.wait();
-
-    if (receipt.status === 0) {
-      console.error("Transaction failed.");
-      throw new Error("The transaction was reverted.");
-    }
-
-    console.log(
-      `NFT Minted! Check it out at: https://explorer.testnet.mantle.xyz/tx/${tx.hash}`
-    );
-  } catch (error) {
-    console.error("Minting failed:", error);
+    throw error;
   }
 }
 
-app.post("/api/mint", upload.single("file"), async (req, res) => {
+app.post("/api/upload", upload.single("file"), async (req, res) => {
   console.log("/api/mint route triggered");
   try {
     const fileBuffer = req.file.buffer;
+    const title = req.body.title;
     console.log("Received file buffer:", fileBuffer);
-    await mintNFT(fileBuffer);
-    console.log("Minting completed successfully");
-    res.status(200).send("NFT Minted Successfully");
+
+    const ipfsHash = await storeOnIPFS(fileBuffer, title);
+    console.log(`File stored on IPFS with hash: ${ipfsHash}`);
+
+    res.status(200).send({ message: "File stored on IPFS", ipfsHash });
   } catch (error) {
     console.error("Error in /api/mint route:", error);
     res.status(500).send("Internal Server Error");
   }
-  console.log("Minting completed successfully");
 });
 
 app.listen(3000, () => {

@@ -124,25 +124,6 @@ const abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "previousOwner",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "OwnershipTransferred",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
         name: "from",
         type: "address",
       },
@@ -280,19 +261,6 @@ const abi = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "owner",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [
       {
         internalType: "uint256",
@@ -309,13 +277,6 @@ const abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "renounceOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -461,19 +422,6 @@ const abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "newOwner",
-        type: "address",
-      },
-    ],
-    name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
 ];
 
 const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
@@ -481,7 +429,7 @@ const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
 const Form = () => {
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
-  const [title1, setTitle1] = useState("");
+  const [title, setTitle] = useState("");
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
@@ -511,15 +459,16 @@ const Form = () => {
     console.log("handleSubmit triggered");
     if (file) {
       try {
-        console.log("File found, attempting to mint NFT...");
         const accounts = await web3.eth.getAccounts();
+        console.log("File found, attempting to mint NFT...");
         const txReceipt = await contract.methods
-          .mintNFT(accounts[0], title1)
-          .send({ from: accounts[0] });
+          .mintNFT(accounts[0], title)
+          .send({ from: accounts[0], gas: 500000 });
         const formData = new FormData();
         formData.append("file", file);
+        formData.append("title", title);
         const response = await axios.post(
-          "http://localhost:3000/api/mint",
+          "http://localhost:3000/api/upload",
           formData,
           {
             headers: {
@@ -527,10 +476,8 @@ const Form = () => {
             },
           }
         );
+        console.log("Minting Response:", txReceipt);
         console.log("Minting Response:", response.data);
-        console.log(
-          `Transaction confirmed with hash: ${txReceipt.transactionHash}`
-        );
       } catch (error) {
         console.error("Error during minting process:", error);
       }
@@ -564,9 +511,9 @@ const Form = () => {
             <label htmlFor="title">NFT title</label>
             <input
               type="text"
-              name="title1"
-              id="title1"
-              onChange={(e) => setTitle1(e.target.value)}
+              name="title"
+              id="title"
+              onChange={(e) => setTitle(e.target.value)}
             />
           </section>
           <button type="submit" className="btn_NFT">
