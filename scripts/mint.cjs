@@ -17,7 +17,7 @@ async function mintNFT(fileBuffer) {
   console.log("MintNFT function started");
   const [owner] = await hre.ethers.getSigners();
   console.log("Owner's Address:", owner.address);
-  const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
+  const contractAddress = "0x64e2C361edB18972D6a82378a88533dd5D9B18b6";
   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
   const simpleNFT = SimpleNFT.attach(contractAddress);
   const fileStream = bufferToStream(fileBuffer);

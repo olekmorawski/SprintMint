@@ -6,12 +6,13 @@ import abi from "../../abis/contractAbi";
 
 let web3;
 
-const contractAddress = "0x227d23545A2B53dEF6A9e68402482534Fd9cb961";
+const contractAddress = "0x64e2C361edB18972D6a82378a88533dd5D9B18b6";
 
 const Form = () => {
   const [file, setFile] = useState(null);
   const [imgURL, setImgURL] = useState(null);
   const [title, setTitle] = useState("");
+  const [metadataUri, setMetadataUri] = useState(""); // Added this state variable
   const [contract, setContract] = useState(null);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const Form = () => {
         const accounts = await web3.eth.getAccounts();
         console.log("File found, attempting to mint NFT...");
         const txReceipt = await contract.methods
-          .mintNFT(accounts[0], title)
+          .mintNFT(accounts[0], metadataUri, title)
           .send({ from: accounts[0], gas: 500000 });
         const formData = new FormData();
         formData.append("file", file);

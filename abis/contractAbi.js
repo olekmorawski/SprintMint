@@ -107,6 +107,12 @@ const abi = [
         name: "uri",
         type: "string",
       },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "title",
+        type: "string",
+      },
     ],
     name: "Minted",
     type: "event",
@@ -195,6 +201,25 @@ const abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+    ],
+    name: "getTokenTitle",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "owner",
         type: "address",
@@ -226,6 +251,11 @@ const abi = [
       {
         internalType: "string",
         name: "uri",
+        type: "string",
+      },
+      {
+        internalType: "string",
+        name: "title",
         type: "string",
       },
     ],
