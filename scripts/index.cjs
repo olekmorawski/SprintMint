@@ -20,7 +20,6 @@ function bufferToStream(buffer) {
 }
 
 async function storeOnIPFS(fileBuffer, title) {
-  console.log("Storing file on IPFS");
   try {
     const options = {
       pinataMetadata: {
@@ -38,24 +37,17 @@ async function storeOnIPFS(fileBuffer, title) {
     const metadataResult = await pinata.pinJSONToIPFS(metadata, options);
     return metadataResult.IpfsHash;
   } catch (error) {
-    console.error("IPFS Upload Error:", error);
-    throw error;
+    console.log("IPFS Upload Error:", error);
   }
 }
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
-  console.log("/api/upload route triggered");
   try {
     const fileBuffer = req.file.buffer;
     const title = req.body.title;
-    console.log("Received file buffer:", fileBuffer);
-
     const ipfsHash = await storeOnIPFS(fileBuffer, title);
-    console.log(`File stored on IPFS with hash: ${ipfsHash}`);
-
     res.status(200).send({ message: "File stored on IPFS", ipfsHash });
   } catch (error) {
-    console.error("Error in /api/mint route:", error);
     res.status(500).send("Internal Server Error");
   }
 });

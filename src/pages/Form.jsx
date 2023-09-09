@@ -32,22 +32,16 @@ const Form = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    console.log("Selected File:", selectedFile);
     setFile(selectedFile);
     const objectURL = URL.createObjectURL(selectedFile);
     setImgURL(objectURL);
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit triggered");
     if (file) {
       try {
-        const accounts = await contract.signer.getAddress(); // Using ethers to get the account address
-
-        console.log("File found, attempting to mint NFT...");
-
-        // Upload the file to your backend first to get the metadata URI.
+        const accounts = await contract.signer.getAddress();
         const formData = new FormData();
         formData.append("file", file);
         formData.append("title", title);
@@ -60,12 +54,10 @@ const Form = () => {
             },
           }
         );
-
         if (response.data && response.data.ipfsHash) {
           const metadataUri = `ipfs://${response.data.ipfsHash}`;
           const tx = await contract.mintNFT(accounts, metadataUri);
           const txReceipt = await tx.wait();
-          console.log("Minting Response:", txReceipt);
         }
       } catch (error) {
         console.error("Error during minting process:", error);
