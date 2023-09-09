@@ -1,11 +1,10 @@
-import Header from '../components/Header.jsx'
-import React from 'react'
+import Header from "../components/Header.jsx";
+import React from "react";
 
 const NFTPreviev = () => {
   return (
     <>
       <Header />
-
       <div className="under_header">
         <div className="main_box_nft">
           <div className="under_text">
@@ -56,7 +55,7 @@ const NFTPreviev = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default NFTPreviev
+export default NFTPreviev;

@@ -1,6 +1,6 @@
 import Home from "./pages/Home";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NFTPreview from "./pages/NFTPreview.jsx"; // Make sure the spelling is correct
+import NFTPreview from "./pages/NFTPreview.jsx";
 import Form from "./pages/Form.jsx";
 
 const App = () => {

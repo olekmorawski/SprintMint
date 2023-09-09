@@ -3,6 +3,7 @@ import { ethers } from "ethers"; // Import ethers instead of Web3
 import Header from "../components/Header.jsx";
 import axios from "axios";
 import abi from "../../abis/contractAbi";
+import { useNavigate } from "react-router-dom";
 
 const contractAddress = "0xa0956DD67459eE7386c131B3103ed34869cFB423";
 
@@ -12,22 +13,25 @@ const Form = () => {
   const [title, setTitle] = useState("");
   const [contract, setContract] = useState(null);
 
+  const navigate = useNavigate();
+
+  const initEthereumProvider = async () => {
+    if (window.ethereum) {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contractInstance = new ethers.Contract(
+        contractAddress,
+        abi,
+        signer
+      );
+      setContract(contractInstance);
+    } else {
+      console.error("Ethereum provider not found");
+    }
+  };
+
   useEffect(() => {
-    const init = async () => {
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const contractInstance = new ethers.Contract(
-          contractAddress,
-          abi,
-          signer
-        );
-        setContract(contractInstance);
-      } else {
-        console.error("Ethereum provider not found");
-      }
-    };
-    init();
+    initEthereumProvider();
   }, []);
 
   const handleFileChange = (e) => {
@@ -36,7 +40,7 @@ const Form = () => {
     const objectURL = URL.createObjectURL(selectedFile);
     setImgURL(objectURL);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (file) {
@@ -58,6 +62,7 @@ const Form = () => {
           const metadataUri = `ipfs://${response.data.ipfsHash}`;
           const tx = await contract.mintNFT(accounts, metadataUri);
           const txReceipt = await tx.wait();
+          navigate("/nftpreview");
         }
       } catch (error) {
         console.error("Error during minting process:", error);
@@ -98,7 +103,7 @@ const Form = () => {
             />
           </section>
           <button type="submit" className="btn_NFT">
-            <p className="btn_text_NFT">✨ Create Now ✨</p>
+            <p className="btn_text_NFT">✨Create Now✨</p>
           </button>
         </form>
         <div className="bar">

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import img from "/styles/images/logo.png";
 
 const Header = () => {
@@ -29,29 +29,29 @@ const Header = () => {
         <img src={img} alt="Our Logo" className="logo" />
       </div>
       <div className="box_header">
-        <a href="">
+        <Link to="/marketplace">
           <div className="header_nav">
             <p className="nav_text">Marketplace</p>
           </div>
-        </a>
-        <a href="">
+        </Link>
+        <Link to="/projects">
           <div className="header_nav">
             <p className="nav_text">Projects</p>
           </div>
-        </a>
-        <a href="">
+        </Link>
+        <Link to="/discord">
           <div className="header_nav">
             <p className="nav_text">Discord</p>
           </div>
-        </a>
-        <a href="">
+        </Link>
+        <Link to="/about">
           <div className="header_nav">
             <p className="nav_text">About</p>
           </div>
-        </a>
+        </Link>
       </div>
       <div className="btn_nav" onClick={openMetaMask}>
-        <p className="btn_text">✨ Create Now ✨</p>
+        <p className="btn_text">✨Create Now✨</p>
       </div>
     </div>
   );
