@@ -39,10 +39,10 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 
 - <img src="https://expressjs.com/images/favicon.png" alt="Express.js Logo" height="35"> [Express.js](https://expressjs.com/) - A fast, unopinionated, minimalist web framework for Node.js.
 - <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/Ipfs-logo-1024-ice-text.png" alt="IPFS Logo" height="35"> [IPFS](https://ipfs.io/) - IPFS is a protocol and network designed to create a peer-to-peer method of storing and sharing hypermedia in a distributed file system.
-- <img src="https://intellipaat.com/mediaFiles/2019/02/Solidity-Logo.jpg" alt="Solidity Logo" height="35"> ![Solidity](https://github.com/ethereum/solidity) - Solidity is an object-oriented, high-level language for implementing smart contracts on various blockchain platforms.
-- <img src="https://global-uploads.webflow.com/60f008ba9757da0940af288e/6226c71334453ab1a9b3a6be_HlDTM6tf_400x400.png" alt="Pinata Logo" height="35"> ![Pinata](https://github.com/PinataCloud/Pinata-SDK) - Pinata provides IPFS API and gateway services, making it easier for users to store and manage data on the IPFS network.
-- <img src="https://seeklogo.com/images/H/hardhat-logo-888739EBB4-seeklogo.com.png" alt="Hardhat Logo" height="35"> ![Hardhat](https://github.com/NomicFoundation/hardhat) - Hardhat is a development environment that aids in the production, testing, and deployment of Ethereum software.
-- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35"> ![Mantle Blockchain](https://www.mantle.xyz/) - Mantle offers a layer-2 blockchain infrastructure designed to enhance the scalability, privacy, and interoperability of Ethereum applications.
+- <img src="https://intellipaat.com/mediaFiles/2019/02/Solidity-Logo.jpg" alt="Solidity Logo" height="35"> [Solidity](https://github.com/ethereum/solidity) - Solidity is an object-oriented, high-level language for implementing smart contracts on various blockchain platforms.
+- <img src="https://global-uploads.webflow.com/60f008ba9757da0940af288e/6226c71334453ab1a9b3a6be_HlDTM6tf_400x400.png" alt="Pinata Logo" height="35"> [Pinata](https://github.com/PinataCloud/Pinata-SDK) - Pinata provides IPFS API and gateway services, making it easier for users to store and manage data on the IPFS network.
+- <img src="https://seeklogo.com/images/H/hardhat-logo-888739EBB4-seeklogo.com.png" alt="Hardhat Logo" height="35"> [Hardhat](https://github.com/NomicFoundation/hardhat) - Hardhat is a development environment that aids in the production, testing, and deployment of Ethereum software.
+- <img src="https://www.mantle.xyz/logo-light.svg" alt="Mantle Logo" height="35"> [Mantle Blockchain](https://www.mantle.xyz/) - Mantle offers a layer-2 blockchain infrastructure designed to enhance the scalability, privacy, and interoperability of Ethereum applications.
 
 ## Libraries
 
