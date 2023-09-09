@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import Web3 from "web3";
+import { ethers } from "ethers"; // Import ethers instead of Web3
 import Header from "../components/Header.jsx";
 import axios from "axios";
 import abi from "../../abis/contractAbi";
 
-let web3;
-
-const contractAddress = "0x64e2C361edB18972D6a82378a88533dd5D9B18b6";
+const contractAddress = "0xa0956DD67459eE7386c131B3103ed34869cFB423";
 
 const Form = () => {
   const [file, setFile] = useState(null);
@@ -17,9 +15,13 @@ const Form = () => {
   useEffect(() => {
     const init = async () => {
       if (window.ethereum) {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        web3 = new Web3(window.ethereum);
-        const contractInstance = new web3.eth.Contract(abi, contractAddress);
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contractInstance = new ethers.Contract(
+          contractAddress,
+          abi,
+          signer
+        );
         setContract(contractInstance);
       } else {
         console.error("Ethereum provider not found");
@@ -41,7 +43,8 @@ const Form = () => {
     console.log("handleSubmit triggered");
     if (file) {
       try {
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await contract.signer.getAddress(); // Using ethers to get the account address
+
         console.log("File found, attempting to mint NFT...");
 
         // Upload the file to your backend first to get the metadata URI.
@@ -60,14 +63,8 @@ const Form = () => {
 
         if (response.data && response.data.ipfsHash) {
           const metadataUri = `ipfs://${response.data.ipfsHash}`;
-          // const gasEstimate = await contract.methods
-          //   .mintNFT(accounts[0], metadataUri, title)
-          //   .estimateGas({ from: accounts[0] });
-
-          const txReceipt = await contract.methods
-            .mintNFT(accounts[0], metadataUri, title)
-            .send({ from: accounts[0], gas: 500000  });
-
+          const tx = await contract.mintNFT(accounts, metadataUri);
+          const txReceipt = await tx.wait();
           console.log("Minting Response:", txReceipt);
         }
       } catch (error) {

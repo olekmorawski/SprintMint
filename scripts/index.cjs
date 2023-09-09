@@ -44,7 +44,7 @@ async function storeOnIPFS(fileBuffer, title) {
 }
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
-  console.log("/api/mint route triggered");
+  console.log("/api/upload route triggered");
   try {
     const fileBuffer = req.file.buffer;
     const title = req.body.title;

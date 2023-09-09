@@ -3,15 +3,13 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
+  const Token = await hre.ethers.getContractFactory("SimpleMintableERC20");
 
-  const simpleNFT = await SimpleNFT.deploy({
-    gasLimit: 30000000,
-  });
+  const token = await Token.deploy();
 
-  await simpleNFT.deployed();
+  await token.deployed();
 
-  console.log("SimpleNFT deployed to:", simpleNFT.address);
+  console.log("Token deployed to:", token.address);
 }
 
 main()
