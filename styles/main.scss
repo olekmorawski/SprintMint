@@ -451,25 +451,3 @@ h2 {
     }
   }
 }
-.thumbnail_container {
-  width: 100vw;
-  height: 953px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  .thumbnail {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 150px;
-    height: 200px;
-    background-color: red;
-    border-radius: 10px;
-    .img_thumbnail {
-      width: 150px;
-      height: 150px;
-      background-color: green;
-      border-radius: 10px;
-    }
-  }
-}

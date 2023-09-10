@@ -23,7 +23,6 @@ const NFTPreviev = () => {
         console.error("Error fetching latest IPFS data:", error);
       }
     };
-
     fetchLatestIPFSData();
   }, [setIpfsData]);
 

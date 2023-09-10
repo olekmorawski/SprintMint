@@ -62,7 +62,7 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 
 ### Installation
 
-1. Clone this repository: `git clone https://github.com/K-Wesolek/ETHWarsaw2023-main/tree/main`
+1. Clone this repository: `git clone https://github.com/olekmorawski/SprintMint`
 2. Navigate to the project directory: `cd SprintMint`
 3. Install frontend dependencies: `npm install`
 
@@ -70,9 +70,9 @@ SprintMint is a revolutionary NFT marketplace that aims to simplify and accelera
 
 1. Start the frontend development server: `npm run dev`
 2. Open your web browser and navigate to the provided Vite URL: `http://localhost:XXXX`
-3. For the backend, navigate to the server directory: `cd server`
-4. Install backend dependencies: `npm install`
-5. Start the backend server: `npm run start:backend`
+3. For the backend, open a second terminal and start it by typing ing: `npm run start:backend`
+4. Switch your Metamask network to Mantle Testnet
+5. Get your testnet Mantle tokens - 'https://faucet.testnet.mantle.xyz'
 
 ## Contributors
 
@@ -89,6 +89,6 @@ This project is licensed under the [MIT License](https://www.mit.edu/~amini/LICE
 
 This project was originally made for ETHWarsaw2023 and applied for the following bounties:
 
-- Build on Mantle (Pool bounty)
+- Build on Mantle (Pool bounty) - qualified
 - Best NFT or Gaming project
 - Best UX
