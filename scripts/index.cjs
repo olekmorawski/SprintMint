@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const multer = require("multer");
 const pinataSDK = require("@pinata/sdk");
 const pinata = new pinataSDK(
@@ -40,15 +41,32 @@ async function storeOnIPFS(fileBuffer, title) {
     console.log("IPFS Upload Error:", error);
   }
 }
+const ipfsHashes = [];
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
   try {
     const fileBuffer = req.file.buffer;
     const title = req.body.title;
     const ipfsHash = await storeOnIPFS(fileBuffer, title);
+    ipfsHashes.push(ipfsHash);
     res.status(200).send({ message: "File stored on IPFS", ipfsHash });
   } catch (error) {
     res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/api/get-ipfs", async (req, res) => {
+  if (ipfsHashes.length === 0) {
+    return res.status(404).send("No IPFS Hash Found");
+  }
+  const getLastestHash = ipfsHashes[ipfsHashes.length - 1];
+  try {
+    const response = await axios.get(`https://ipfs.io/ipfs/${getLastestHash}`);
+    const metadata = response.data;
+    res.status(200).send({ ipfsHash: getLastestHash, metadata });
+  } catch (error) {
+    console.error("Error fetching metadata from IPFS:", error);
+    res.status(500).send("Failed to fetch metadata from IPFS.");
   }
 });
 

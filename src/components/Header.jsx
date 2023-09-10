@@ -1,10 +1,14 @@
 import { useNavigate, Link } from "react-router-dom";
+import { useState } from "react";
+import { ethers } from "ethers";
 import img from "/styles/images/logo.png";
 
 const Header = () => {
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  let provider = new ethers.providers.Web3Provider(window.ethereum);
   let navigate = useNavigate();
 
-  const openMetaMask = async () => {
+  const connectWallet = async () => {
     if (window.ethereum) {
       try {
         const accounts = await window.ethereum.request({
@@ -21,6 +25,12 @@ const Header = () => {
         "MetaMask is not installed. Please consider installing it: https://metamask.io/"
       );
     }
+    setIsWalletConnected(true);
+  };
+
+  const disconnectWallet = () => {
+    setIsWalletConnected(false);
+    provider = null;
   };
 
   return (
@@ -50,8 +60,12 @@ const Header = () => {
           </div>
         </Link>
       </div>
-      <div className="btn_nav" onClick={openMetaMask}>
-        <p className="btn_text">✨Create Now✨</p>
+      <div
+        className="btn_nav"
+        onClick={isWalletConnected ? disconnectWallet : connectWallet}>
+        <p className="btn_text">
+          {isWalletConnected ? "Disconnect" : "✨Create Now✨"}
+        </p>
       </div>
     </div>
   );

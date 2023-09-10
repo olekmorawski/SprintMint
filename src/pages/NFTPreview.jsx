@@ -1,7 +1,32 @@
 import Header from "../components/Header.jsx";
-import React from "react";
+import { useContext, useEffect } from "react";
+import { IPFSDataContext } from "../../IPFSDataContext";
+import axios from "axios";
 
 const NFTPreviev = () => {
+  const { ipfsData, setIpfsData } = useContext(IPFSDataContext);
+
+  useEffect(() => {
+    const fetchLatestIPFSData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/get-ipfs");
+        const ipfsHash = response.data.ipfsHash;
+        const metadata = response.data.metadata;
+        setIpfsData({
+          ipfsLink: `ipfs://${ipfsHash}`,
+          metadata: {
+            title: metadata.title,
+            image: metadata.image,
+          },
+        });
+      } catch (error) {
+        console.error("Error fetching latest IPFS data:", error);
+      }
+    };
+
+    fetchLatestIPFSData();
+  }, [setIpfsData]);
+
   return (
     <>
       <Header />
@@ -9,14 +34,17 @@ const NFTPreviev = () => {
         <div className="main_box_nft">
           <div className="under_text">
             <p className="p1">YOUR NFT HAS BEEN</p>
-
             <p className="p2">CREATED!</p>
           </div>
           <div className="nftbox">
             <div className="left">
-              <div className="picture"></div>
+              <img
+                src={ipfsData.metadata.image}
+                alt={ipfsData.metadata.title}
+                className="picture"
+              />
               <div className="picturedesdiv">
-                <p className="picturedes">Big Bro</p>
+                <p className="nft_title">{ipfsData.metadata.title}</p>
               </div>
             </div>
             <div className="right">

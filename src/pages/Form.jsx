@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
-import { ethers } from "ethers"; // Import ethers instead of Web3
+import { useState, useEffect, useContext } from "react";
+import { ethers } from "ethers";
 import Header from "../components/Header.jsx";
 import axios from "axios";
 import abi from "../../abis/contractAbi";
 import { useNavigate } from "react-router-dom";
+import { IPFSDataContext } from "../../IPFSDataContext";
 
 const contractAddress = "0xa0956DD67459eE7386c131B3103ed34869cFB423";
 
@@ -14,6 +15,7 @@ const Form = () => {
   const [contract, setContract] = useState(null);
 
   const navigate = useNavigate();
+  const { setIpfsData } = useContext(IPFSDataContext);
 
   const initEthereumProvider = async () => {
     if (window.ethereum) {
@@ -62,6 +64,14 @@ const Form = () => {
           const metadataUri = `ipfs://${response.data.ipfsHash}`;
           const tx = await contract.mintNFT(accounts, metadataUri);
           const txReceipt = await tx.wait();
+          setIpfsData({
+            ipfsLink: metadataUri,
+            metadata: {
+              title: title,
+              image: metadataUri,
+            },
+          });
+
           navigate("/nftpreview");
         }
       } catch (error) {
