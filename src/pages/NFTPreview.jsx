@@ -13,7 +13,7 @@ const NFTPreviev = () => {
         const ipfsHash = response.data.ipfsHash;
         const metadata = response.data.metadata;
         setIpfsData({
-          ipfsLink: `ipfs://${ipfsHash}`,
+          ipfsLink: `https://gateway.pinata.cloud/ipfs/${ipfsHash}`,
           metadata: {
             title: metadata.title,
             image: metadata.image,

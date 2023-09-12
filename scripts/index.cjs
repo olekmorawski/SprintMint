@@ -33,7 +33,7 @@ async function storeOnIPFS(fileBuffer, title) {
     );
     const metadata = {
       title: title,
-      image: `ipfs://${imageResult.IpfsHash}`,
+      image: `https://gateway.pinata.cloud/ipfs/${imageResult.IpfsHash}`,
     };
     const metadataResult = await pinata.pinJSONToIPFS(metadata, options);
     return metadataResult.IpfsHash;
@@ -61,7 +61,9 @@ app.get("/api/get-ipfs", async (req, res) => {
   }
   const getLastestHash = ipfsHashes[ipfsHashes.length - 1];
   try {
-    const response = await axios.get(`https://ipfs.io/ipfs/${getLastestHash}`);
+    const response = await axios.get(
+      `https://gateway.pinata.cloud/ipfs/${getLastestHash}`
+    );
     const metadata = response.data;
     res.status(200).send({ ipfsHash: getLastestHash, metadata });
   } catch (error) {
