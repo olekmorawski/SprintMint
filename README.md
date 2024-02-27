@@ -2,7 +2,7 @@
 
 ![SprintMint Logo](/styles/images/logo4git.png)
 
-Welcome to SprintMint, your ultimate platform for everything Non-Fungible Tokens (NFTs)! 🎨 Whether you're looking to mint your first NFT or you're an experienced artist or collector, SprintMint provides a comprehensive yet simplified experience. Say goodbye to complexity and high costs, and say hello to a user-friendly platform for NFT minting, buying, and selling.
+Welcome to SprintMint, is a minter for Non-Fungible Tokens (NFTs)! 🎨 If you're looking to mint your first NFT, SprintMint provides a simplified experience. Say goodbye to complexity and high costs, and say hello to a user-friendly platform for NFT minting.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ Welcome to SprintMint, your ultimate platform for everything Non-Fungible Tokens
 
 ## Introduction
 
-SprintMint is a revolutionary NFT marketplace that aims to simplify and accelerate the process of creating, minting, buying, and selling NFTs. With a focus on user experience and cost-efficiency, SprintMint is the go-to platform for both newcomers and seasoned NFT enthusiasts.
+SprintMint is an NFT minter that aims to simplify and accelerate the process of creating and minting NFTs. With a focus on user experience and cost-efficiency, SprintMint is the go-to platform for both newcomers and seasoned NFT enthusiasts.
 
 ## Features
 
